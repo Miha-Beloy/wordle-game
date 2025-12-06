@@ -1,19 +1,17 @@
-package main.java.com.wordle.game;
+package src.main.java.com.wordle.game;
 
-// WordleGame.java
-
-import main.java.com.wordle.dictionary.WordleDictionary;
+import src.main.java.com.wordle.dictionary.WordLeDictionary;
 import java.util.*;
 
 public class WordleGame {
-    private final WordleDictionary dictionary;
+    private final WordLeDictionary dictionary;
     private final String secretWord;
     private int attemptsLeft;
     private boolean gameOver;
     private boolean win;
     private final List<String> guesses;
 
-    public WordleGame(WordleDictionary dictionary) {
+    public WordleGame(WordLeDictionary dictionary) {
         this.dictionary = dictionary;
         this.guesses = new ArrayList<>();
         this.attemptsLeft = 6;

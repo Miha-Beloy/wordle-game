@@ -1,14 +1,12 @@
-package main.java.com.wordle.dictionary;
-// WordleDictionary.java
-
+package src.main.java.com.wordle.dictionary;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class WordleDictionary {
+public class WordLeDictionary {
     private Set<String> words;
 
-    public WordleDictionary() {
+    public WordLeDictionary() {
         this.words = new HashSet<>();
     }
 
