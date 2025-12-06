@@ -1,8 +1,8 @@
-package src.test.java.com.wordle.game;
+// WordleGameTest.java
+package test.java.com.wordle.game;
 
-import src.main.java.com.wordle.dictionary.WordLeDictionary;
-import src.main.java.com.wordle.game.WordleGame;
-import java.util.HashSet;
+import main.java.com.wordle.dictionary.WordleDictionary;
+import main.java.com.wordle.game.WordleGame;
 import java.util.Set;
 
 public class WordleGameTest {
@@ -23,11 +23,11 @@ public class WordleGameTest {
         testGetHintAfterGuess();
         testGameOverState();
 
-        System.out.println("=== ВСЕ ТЕСТЫ ЗАВЕРШЕНЫ ===");
+        System.out.println("\n=== ВСЕ ТЕСТЫ ЗАВЕРШЕНЫ ===");
     }
 
-    private static WordLeDictionary createTestDictionary() {
-        WordLeDictionary dictionary = new WordLeDictionary();
+    private static WordleDictionary createTestDictionary() {
+        WordleDictionary dictionary = new WordleDictionary();
         Set<String> words = Set.of("слово", "метро", "парта", "столб", "крона");
         for (String word : words) {
             dictionary.addWord(word);
@@ -38,7 +38,7 @@ public class WordleGameTest {
     static void testMakeGuessCorrectWord() {
         System.out.println("\n--- Тест: угадывание правильного слова ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
             String secret = game.getSecretWord();
             WordleGame.GameResult result = game.makeGuess(secret);
@@ -56,7 +56,7 @@ public class WordleGameTest {
     static void testMakeGuessWrongWord() {
         System.out.println("\n--- Тест: неправильное слово ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
             WordleGame.GameResult result = game.makeGuess("метро");
 
@@ -73,7 +73,7 @@ public class WordleGameTest {
     static void testGameOverAfterSixAttempts() {
         System.out.println("\n--- Тест: завершение игры после 6 попыток ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
 
             for (int i = 0; i < 6; i++) {
@@ -93,7 +93,7 @@ public class WordleGameTest {
     static void testInvalidWordLength() {
         System.out.println("\n--- Тест: слово неправильной длины ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
             game.makeGuess("мет");
             System.out.println("✗ FAIL: Ожидалось исключение для короткого слова");
@@ -106,12 +106,28 @@ public class WordleGameTest {
         } catch (Exception e) {
             System.out.println("✗ FAIL: Неожиданное исключение: " + e.getMessage());
         }
+
+        // Дополнительный тест для слишком длинного слова
+        try {
+            WordleDictionary dictionary = createTestDictionary();
+            WordleGame game = new WordleGame(dictionary);
+            game.makeGuess("метрополитен");
+            System.out.println("✗ FAIL: Ожидалось исключение для длинного слова");
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().equals("Слово должно состоять из 5 букв")) {
+                System.out.println("✓ PASS: Корректное исключение для длинного слова");
+            } else {
+                System.out.println("✗ FAIL: Неправильное сообщение исключения: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            System.out.println("✗ FAIL: Неожиданное исключение: " + e.getMessage());
+        }
     }
 
     static void testWordNotInDictionary() {
         System.out.println("\n--- Тест: слово отсутствует в словаре ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
             game.makeGuess("абвгд");
             System.out.println("✗ FAIL: Ожидалось исключение для отсутствующего слова");
@@ -129,7 +145,7 @@ public class WordleGameTest {
     static void testGetHintBeforeAnyGuess() {
         System.out.println("\n--- Тест: подсказка до первой попытки ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
             String hint = game.getHint();
 
@@ -146,9 +162,9 @@ public class WordleGameTest {
     static void testGetHintAfterGuess() {
         System.out.println("\n--- Тест: подсказка после попытки ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
-            game.makeGuess("метро");
+            WordleGame.GameResult result = game.makeGuess("метро");
             String hint = game.getHint();
 
             if (hint != null && !hint.isEmpty() && !hint.equals("Сделайте первую попытку")) {
@@ -164,15 +180,15 @@ public class WordleGameTest {
     static void testGameOverState() {
         System.out.println("\n--- Тест: состояние после завершения игры ---");
         try {
-            WordLeDictionary dictionary = createTestDictionary();
+            WordleDictionary dictionary = createTestDictionary();
             WordleGame game = new WordleGame(dictionary);
 
-            // Делаем 6 попыток
+            // Исчерпываем все попытки
             for (int i = 0; i < 6; i++) {
                 game.makeGuess("метро");
             }
 
-            // Проверяем, что после завершения игры нельзя сделать ход
+            // Пробуем сделать ход после завершения игры
             try {
                 game.makeGuess("слово");
                 System.out.println("✗ FAIL: Ожидалось исключение при ходе после завершения игры");
@@ -182,6 +198,18 @@ public class WordleGameTest {
                 } else {
                     System.out.println("✗ FAIL: Неправильное сообщение исключения: " + e.getMessage());
                 }
+            }
+
+            // Пробуем получить подсказку после завершения игры
+            try {
+                String hint = game.getHint();
+                if ("Игра завершена".equals(hint)) {
+                    System.out.println("✓ PASS: Корректная подсказка после завершения игры");
+                } else {
+                    System.out.println("✗ FAIL: Неправильная подсказка после завершения: " + hint);
+                }
+            } catch (Exception e) {
+                System.out.println("✗ FAIL: Исключение при получении подсказки после игры: " + e.getMessage());
             }
 
         } catch (Exception e) {

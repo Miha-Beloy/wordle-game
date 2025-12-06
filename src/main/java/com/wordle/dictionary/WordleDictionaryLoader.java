@@ -1,12 +1,14 @@
-package src.main.java.com.wordle.dictionary;
+package main.java.com.wordle.dictionary;
+
+// WordleDictionaryLoader.java
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class WordLeDictionaryLoader {
-    public WordLeDictionary loadDictionary(String filename) {
-        WordLeDictionary dictionary = new WordLeDictionary();
+public class WordleDictionaryLoader {
+    public WordleDictionary loadDictionary(String filename) {
+        WordleDictionary dictionary = new WordleDictionary();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
